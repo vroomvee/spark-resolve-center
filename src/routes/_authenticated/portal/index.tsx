@@ -5,7 +5,7 @@ import { PortalHeading, Status } from "@/components/thump/portal-shell";
 import { useDemo } from "@/components/thump/demo-context";
 import { Input } from "@/components/ui/input";
 import { pageHead, statuses } from "@/lib/thump/data";
-export const Route = createFileRoute("/portal/")({
+export const Route = createFileRoute("/_authenticated/portal/")({
   head: () =>
     pageHead(
       "Client workspace demo",

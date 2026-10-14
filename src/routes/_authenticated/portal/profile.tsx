@@ -4,7 +4,7 @@ import { PortalHeading } from "@/components/thump/portal-shell";
 import { Button } from "@/components/ui/button";
 import { useDemo } from "@/components/thump/demo-context";
 import { pageHead } from "@/lib/thump/data";
-export const Route = createFileRoute("/portal/profile")({
+export const Route = createFileRoute("/_authenticated/portal/profile")({
   head: () =>
     pageHead("Demo client profile", "Preview the THUMP client profile and organisation workspace."),
   component: Profile,
