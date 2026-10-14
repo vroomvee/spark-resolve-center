@@ -4,7 +4,7 @@ import { useDemo } from "@/components/thump/demo-context";
 import { Status } from "@/components/thump/portal-shell";
 import { pageHead } from "@/lib/thump/data";
 import { Button } from "@/components/ui/button";
-export const Route = createFileRoute("/portal/tickets/$ticketId")({
+export const Route = createFileRoute("/_authenticated/portal/tickets/$ticketId")({
   validateSearch: (search: Record<string, unknown>) => ({
     created: search["created"] === true || search["created"] === "true",
   }),

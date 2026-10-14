@@ -1,19 +1,123 @@
-import { Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { ArrowLeft, ArrowRight, ShieldCheck, Eye, EyeOff, Info } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { ArrowLeft, ArrowRight, ShieldCheck, Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Brand } from "./brand";
+import { supabase } from "@/integrations/supabase/client";
+import { emailSchema, passwordSchema } from "@/lib/thump/account";
 import rhino from "@/assets/thump-rhino.jpg";
-export function AuthScreen({ mode = "login" }: { mode?: "login" | "forgot" | "reset" }) {
-  const [notice, setNotice] = useState(false);
+
+type Mode = "login" | "forgot" | "reset";
+
+function safeRedirect(path?: string) {
+  return path && path.startsWith("/portal") ? path : "/portal";
+}
+
+export function AuthScreen({ mode = "login", redirect }: { mode?: Mode; redirect?: string }) {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [visible, setVisible] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  // reset mode: wait for the recovery session parsed from the email link
+  const [recovery, setRecovery] = useState<"checking" | "ready" | "invalid">("checking");
+
+  useEffect(() => {
+    if (mode === "login") {
+      supabase.auth.getUser().then(({ data }) => {
+        if (data.user) navigate({ to: safeRedirect(redirect), replace: true });
+      });
+    }
+    if (mode !== "reset") return;
+    const hash = window.location.hash;
+    const linkError = new URLSearchParams(hash.slice(1)).get("error_description");
+    if (linkError) {
+      setRecovery("invalid");
+      return;
+    }
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "PASSWORD_RECOVERY" || (session && hash.includes("type=recovery")))
+        setRecovery("ready");
+    });
+    const timer = setTimeout(async () => {
+      const { data } = await supabase.auth.getSession();
+      setRecovery((r) => (r === "ready" ? r : data.session ? "ready" : "invalid"));
+    }, 1200);
+    return () => {
+      sub.subscription.unsubscribe();
+      clearTimeout(timer);
+    };
+  }, [mode, navigate, redirect]);
+
   const title =
     mode === "login"
       ? "Welcome back."
       : mode === "forgot"
         ? "Forgot password?"
         : "Reset your password.";
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    const form = new FormData(e.currentTarget);
+    const email = emailSchema.safeParse(form.get("email") ?? "");
+    const password = passwordSchema.safeParse(form.get("password") ?? "");
+    setBusy(true);
+    try {
+      if (mode === "login") {
+        if (!email.success) return setError(email.error.issues[0]!.message);
+        if (!form.get("password")) return setError("Enter your password.");
+        const { error } = await supabase.auth.signInWithPassword({
+          email: email.data,
+          password: String(form.get("password")),
+        });
+        if (error) {
+          return setError(
+            error.message.toLowerCase().includes("invalid")
+              ? "Incorrect email or password."
+              : error.message.toLowerCase().includes("confirm")
+                ? "This account hasn't been activated yet. Please contact THUMP."
+                : "Sign-in failed. Please try again.",
+          );
+        }
+        queryClient.clear();
+        navigate({ to: safeRedirect(redirect), replace: true });
+      } else if (mode === "forgot") {
+        if (!email.success) return setError(email.error.issues[0]!.message);
+        const { error } = await supabase.auth.resetPasswordForEmail(email.data, {
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+        if (error && error.status === 429)
+          return setError("Too many requests. Please wait a minute and try again.");
+        // Same message whether or not the account exists, to avoid revealing registered emails.
+        setSuccess(
+          "If an account exists for that email, a reset link is on its way. Check your inbox.",
+        );
+      } else {
+        if (!password.success) return setError(password.error.issues[0]!.message);
+        if (form.get("password") !== form.get("confirm"))
+          return setError("The passwords don't match.");
+        const { error } = await supabase.auth.updateUser({ password: password.data });
+        if (error)
+          return setError(
+            error.message.toLowerCase().includes("different")
+              ? "Choose a password different from your current one."
+              : "We couldn't update your password. Request a new reset link.",
+          );
+        setSuccess("Password updated. Taking you to your workspace…");
+        setTimeout(() => navigate({ to: "/portal", replace: true }), 1200);
+      }
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const resetBlocked = mode === "reset" && recovery !== "ready";
+
   return (
     <div className="auth-layout min-h-screen grid lg:grid-cols-2">
       <section className="hidden lg:flex relative bg-hero text-hero-foreground p-12 flex-col justify-between overflow-hidden">
@@ -61,21 +165,26 @@ export function AuthScreen({ mode = "login" }: { mode?: "login" | "forgot" | "re
                 ? "Enter your registered email to request a reset link."
                 : "Choose a new password for your client account."}
           </p>
-          <div className="bg-muted border border-border p-3 mb-6 text-xs text-muted-foreground flex gap-2">
-            <Info className="size-4 shrink-0" />
-            Live account access is not connected yet. Explore the fictional demo below.
-          </div>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              setNotice(true);
-            }}
-            className="space-y-5"
-          >
+          {mode === "reset" && recovery === "checking" && (
+            <p role="status" className="notice mb-6 flex items-center gap-2">
+              <Loader2 className="size-4 animate-spin" /> Verifying your reset link…
+            </p>
+          )}
+          {mode === "reset" && recovery === "invalid" && (
+            <p role="alert" className="notice mb-6">
+              This reset link is invalid or has expired.{" "}
+              <Link to="/forgot-password" className="text-primary underline">
+                Request a new link
+              </Link>
+              .
+            </p>
+          )}
+          <form onSubmit={onSubmit} className="space-y-5" noValidate>
             {mode !== "reset" && (
               <label className="field-label">
                 Email address
                 <Input
+                  name="email"
                   type="email"
                   required
                   maxLength={255}
@@ -90,12 +199,13 @@ export function AuthScreen({ mode = "login" }: { mode?: "login" | "forgot" | "re
                 {mode === "reset" ? "New password" : "Password"}
                 <div className="relative mt-2">
                   <Input
+                    name="password"
                     type={visible ? "text" : "password"}
                     required
-                    minLength={8}
                     maxLength={128}
+                    disabled={resetBlocked}
                     autoComplete={mode === "reset" ? "new-password" : "current-password"}
-                    placeholder="Enter your password"
+                    placeholder={mode === "reset" ? "At least 8 characters" : "Enter your password"}
                     className="h-12 pr-12"
                   />
                   <Button
@@ -115,10 +225,11 @@ export function AuthScreen({ mode = "login" }: { mode?: "login" | "forgot" | "re
               <label className="field-label">
                 Confirm new password
                 <Input
+                  name="confirm"
                   type="password"
                   required
-                  minLength={8}
                   maxLength={128}
+                  disabled={resetBlocked}
                   autoComplete="new-password"
                   className="mt-2 h-12"
                 />
@@ -131,44 +242,39 @@ export function AuthScreen({ mode = "login" }: { mode?: "login" | "forgot" | "re
                 </Link>
               </div>
             )}
-            <Button className="w-full h-12" type="submit">
-              {mode === "login"
-                ? "Client Login"
-                : mode === "forgot"
-                  ? "Request reset link"
-                  : "Update password"}
-              <ArrowRight />
-            </Button>
-            {notice && (
-              <p role="status" className="notice">
-                {mode === "login"
-                  ? "Sign-in is not connected. No account was authenticated."
-                  : mode === "forgot"
-                    ? "No reset email was sent. Email recovery will be available after live services are connected."
-                    : "No password was changed. A valid recovery link and live account connection are required."}
+            {error && (
+              <p role="alert" className="text-sm text-destructive">
+                {error}
               </p>
             )}
+            {success && (
+              <p role="status" className="notice">
+                {success}
+              </p>
+            )}
+            <Button className="w-full h-12" type="submit" disabled={busy || resetBlocked}>
+              {busy && <Loader2 className="animate-spin" />}
+              {mode === "login"
+                ? busy
+                  ? "Signing in…"
+                  : "Client Login"
+                : mode === "forgot"
+                  ? busy
+                    ? "Sending…"
+                    : "Request reset link"
+                  : busy
+                    ? "Updating…"
+                    : "Update password"}
+              {!busy && <ArrowRight />}
+            </Button>
           </form>
           {mode === "login" ? (
-            <>
-              <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground">
-                <span className="h-px flex-1 bg-border" />
-                PREVIEW THE WORKSPACE
-                <span className="h-px flex-1 bg-border" />
-              </div>
-              <Button asChild variant="outline" className="w-full h-12">
-                <Link to="/portal">
-                  Explore demo portal
-                  <ArrowUpRightIcon />
-                </Link>
-              </Button>
-              <p className="text-xs text-muted-foreground text-center mt-8">
-                Need client access?{" "}
-                <a href="mailto:mohit@thumpserve.com" className="text-foreground underline">
-                  Contact THUMP
-                </a>
-              </p>
-            </>
+            <p className="text-xs text-muted-foreground text-center mt-8">
+              Client accounts are set up by THUMP. Need access?{" "}
+              <a href="mailto:mohit@thumpserve.com" className="text-foreground underline">
+                Contact THUMP
+              </a>
+            </p>
           ) : (
             <Link to="/login" className="block text-center mt-6 text-sm text-muted-foreground">
               Back to client login
@@ -181,7 +287,4 @@ export function AuthScreen({ mode = "login" }: { mode?: "login" | "forgot" | "re
       </main>
     </div>
   );
-}
-function ArrowUpRightIcon() {
-  return <ArrowRight />;
 }

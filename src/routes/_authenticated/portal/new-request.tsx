@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { sites, assets, categories, pageHead } from "@/lib/thump/data";
-export const Route = createFileRoute("/portal/new-request")({
+export const Route = createFileRoute("/_authenticated/portal/new-request")({
   head: () =>
     pageHead(
       "New service request demo",

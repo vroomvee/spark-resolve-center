@@ -75,7 +75,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      current_company_id: { Args: never; Returns: string }
       provision_client: {
         Args: {
           _company_name: string
