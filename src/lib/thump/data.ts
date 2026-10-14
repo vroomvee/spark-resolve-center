@@ -8,10 +8,10 @@ export const services = [
   { name: 'Fire curtains', icon: PanelsTopLeft, text: 'Contain fire. Protect spaces.', description: 'Fire curtain consultation, installation and maintenance for your building.' },
   { name: 'Maintenance services', icon: Wrench, text: 'Readiness is a continuous effort.', description: 'Preventive maintenance and service support for your fire safety equipment.' },
 ];
-export const categories = ['Fire alarm panels', 'Hydrants', 'Fire extinguishers', 'Sprinkler systems', 'Fire pumps', 'Fire curtains', 'Other fire safety equipment'];
+export const categories = ['Fire alarm panels', 'Hydrants', 'Fire extinguishers', 'Sprinkler systems', 'Fire pumps', 'Fire curtains', 'Other fire safety equipment'] as const;
 export const statuses = ['New', 'Under Review', 'Scheduled', 'In Progress', 'Awaiting Parts', 'Resolved', 'Closed'] as const;
-export type Ticket = { id: string; title: string; site: string; asset: string; category: string; description: string; priority: string; status: typeof statuses[number]; date: string; visit?: string; photo?: string; history: { status: string; date: string; note: string }[] };
-export const sites = ['Demo — Orion Business Park', 'Demo — Cedar Heights'];
+export type Ticket = { id: string; title: string; site: string; asset: string; category: string; description: string; priority: string; status: typeof statuses[number]; date: string; visit?: string | undefined; photo?: string | undefined; history: { status: string; date: string; note: string }[] };
+export const sites = ['Demo — Orion Business Park', 'Demo — Cedar Heights'] as const;
 export const assets = [
   { id: 'FAP-01', site: sites[0], name: 'Main fire alarm panel', category: categories[0] },
   { id: 'PMP-02', site: sites[0], name: 'Basement fire pump', category: categories[4] },
