@@ -13,13 +13,13 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as PortalRouteImport } from './routes/portal'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ServicesRouteImport } from './routes/services'
-import { Route as PortalIndexRouteImport } from './routes/portal/index'
-import { Route as PortalNewRequestRouteImport } from './routes/portal/new-request'
-import { Route as PortalProfileRouteImport } from './routes/portal/profile'
-import { Route as PortalTicketsTicketIdRouteImport } from './routes/portal/tickets/$ticketId'
+import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
+import { Route as AuthenticatedPortalIndexRouteImport } from './routes/_authenticated/portal/index'
+import { Route as AuthenticatedPortalNewRequestRouteImport } from './routes/_authenticated/portal/new-request'
+import { Route as AuthenticatedPortalProfileRouteImport } from './routes/_authenticated/portal/profile'
+import { Route as AuthenticatedPortalTicketsTicketIdRouteImport } from './routes/_authenticated/portal/tickets/$ticketId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -41,11 +41,6 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PortalRoute = PortalRouteImport.update({
-  id: '/portal',
-  path: '/portal',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
@@ -56,39 +51,48 @@ const ServicesRoute = ServicesRouteImport.update({
   path: '/services',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PortalIndexRoute = PortalIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => PortalRoute,
+const AuthenticatedPortalRoute = AuthenticatedPortalRouteImport.update({
+  id: '/_authenticated/portal',
+  path: '/portal',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const PortalNewRequestRoute = PortalNewRequestRouteImport.update({
-  id: '/new-request',
-  path: '/new-request',
-  getParentRoute: () => PortalRoute,
-} as any)
-const PortalProfileRoute = PortalProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => PortalRoute,
-} as any)
-const PortalTicketsTicketIdRoute = PortalTicketsTicketIdRouteImport.update({
-  id: '/tickets/$ticketId',
-  path: '/tickets/$ticketId',
-  getParentRoute: () => PortalRoute,
-} as any)
+const AuthenticatedPortalIndexRoute =
+  AuthenticatedPortalIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedPortalRoute,
+  } as any)
+const AuthenticatedPortalNewRequestRoute =
+  AuthenticatedPortalNewRequestRouteImport.update({
+    id: '/new-request',
+    path: '/new-request',
+    getParentRoute: () => AuthenticatedPortalRoute,
+  } as any)
+const AuthenticatedPortalProfileRoute =
+  AuthenticatedPortalProfileRouteImport.update({
+    id: '/profile',
+    path: '/profile',
+    getParentRoute: () => AuthenticatedPortalRoute,
+  } as any)
+const AuthenticatedPortalTicketsTicketIdRoute =
+  AuthenticatedPortalTicketsTicketIdRouteImport.update({
+    id: '/tickets/$ticketId',
+    path: '/tickets/$ticketId',
+    getParentRoute: () => AuthenticatedPortalRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
-  '/portal': typeof PortalRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
-  '/portal/new-request': typeof PortalNewRequestRoute
-  '/portal/profile': typeof PortalProfileRoute
-  '/portal/': typeof PortalIndexRoute
-  '/portal/tickets/$ticketId': typeof PortalTicketsTicketIdRoute
+  '/portal': typeof AuthenticatedPortalRouteWithChildren
+  '/portal/new-request': typeof AuthenticatedPortalNewRequestRoute
+  '/portal/profile': typeof AuthenticatedPortalProfileRoute
+  '/portal/': typeof AuthenticatedPortalIndexRoute
+  '/portal/tickets/$ticketId': typeof AuthenticatedPortalTicketsTicketIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -97,10 +101,10 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
-  '/portal/new-request': typeof PortalNewRequestRoute
-  '/portal/profile': typeof PortalProfileRoute
-  '/portal': typeof PortalIndexRoute
-  '/portal/tickets/$ticketId': typeof PortalTicketsTicketIdRoute
+  '/portal/new-request': typeof AuthenticatedPortalNewRequestRoute
+  '/portal/profile': typeof AuthenticatedPortalProfileRoute
+  '/portal': typeof AuthenticatedPortalIndexRoute
+  '/portal/tickets/$ticketId': typeof AuthenticatedPortalTicketsTicketIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -108,13 +112,13 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
-  '/portal': typeof PortalRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
-  '/portal/new-request': typeof PortalNewRequestRoute
-  '/portal/profile': typeof PortalProfileRoute
-  '/portal/': typeof PortalIndexRoute
-  '/portal/tickets/$ticketId': typeof PortalTicketsTicketIdRoute
+  '/_authenticated/portal': typeof AuthenticatedPortalRouteWithChildren
+  '/_authenticated/portal/new-request': typeof AuthenticatedPortalNewRequestRoute
+  '/_authenticated/portal/profile': typeof AuthenticatedPortalProfileRoute
+  '/_authenticated/portal/': typeof AuthenticatedPortalIndexRoute
+  '/_authenticated/portal/tickets/$ticketId': typeof AuthenticatedPortalTicketsTicketIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -123,9 +127,9 @@ export interface FileRouteTypes {
     | '/contact'
     | '/forgot-password'
     | '/login'
-    | '/portal'
     | '/reset-password'
     | '/services'
+    | '/portal'
     | '/portal/new-request'
     | '/portal/profile'
     | '/portal/'
@@ -148,13 +152,13 @@ export interface FileRouteTypes {
     | '/contact'
     | '/forgot-password'
     | '/login'
-    | '/portal'
     | '/reset-password'
     | '/services'
-    | '/portal/new-request'
-    | '/portal/profile'
-    | '/portal/'
-    | '/portal/tickets/$ticketId'
+    | '/_authenticated/portal'
+    | '/_authenticated/portal/new-request'
+    | '/_authenticated/portal/profile'
+    | '/_authenticated/portal/'
+    | '/_authenticated/portal/tickets/$ticketId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -162,9 +166,9 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
-  PortalRoute: typeof PortalRouteWithChildren
   ResetPasswordRoute: typeof ResetPasswordRoute
   ServicesRoute: typeof ServicesRoute
+  AuthenticatedPortalRoute: typeof AuthenticatedPortalRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -197,13 +201,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/portal': {
-      id: '/portal'
-      path: '/portal'
-      fullPath: '/portal'
-      preLoaderRoute: typeof PortalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
@@ -218,62 +215,70 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/portal/': {
-      id: '/portal/'
+    '/_authenticated/portal': {
+      id: '/_authenticated/portal'
+      path: '/portal'
+      fullPath: '/portal'
+      preLoaderRoute: typeof AuthenticatedPortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/portal/': {
+      id: '/_authenticated/portal/'
       path: '/'
       fullPath: '/portal/'
-      preLoaderRoute: typeof PortalIndexRouteImport
-      parentRoute: typeof PortalRoute
+      preLoaderRoute: typeof AuthenticatedPortalIndexRouteImport
+      parentRoute: typeof AuthenticatedPortalRoute
     }
-    '/portal/new-request': {
-      id: '/portal/new-request'
+    '/_authenticated/portal/new-request': {
+      id: '/_authenticated/portal/new-request'
       path: '/new-request'
       fullPath: '/portal/new-request'
-      preLoaderRoute: typeof PortalNewRequestRouteImport
-      parentRoute: typeof PortalRoute
+      preLoaderRoute: typeof AuthenticatedPortalNewRequestRouteImport
+      parentRoute: typeof AuthenticatedPortalRoute
     }
-    '/portal/profile': {
-      id: '/portal/profile'
+    '/_authenticated/portal/profile': {
+      id: '/_authenticated/portal/profile'
       path: '/profile'
       fullPath: '/portal/profile'
-      preLoaderRoute: typeof PortalProfileRouteImport
-      parentRoute: typeof PortalRoute
+      preLoaderRoute: typeof AuthenticatedPortalProfileRouteImport
+      parentRoute: typeof AuthenticatedPortalRoute
     }
-    '/portal/tickets/$ticketId': {
-      id: '/portal/tickets/$ticketId'
+    '/_authenticated/portal/tickets/$ticketId': {
+      id: '/_authenticated/portal/tickets/$ticketId'
       path: '/tickets/$ticketId'
       fullPath: '/portal/tickets/$ticketId'
-      preLoaderRoute: typeof PortalTicketsTicketIdRouteImport
-      parentRoute: typeof PortalRoute
+      preLoaderRoute: typeof AuthenticatedPortalTicketsTicketIdRouteImport
+      parentRoute: typeof AuthenticatedPortalRoute
     }
   }
 }
 
-interface PortalRouteChildren {
-  PortalNewRequestRoute: typeof PortalNewRequestRoute
-  PortalProfileRoute: typeof PortalProfileRoute
-  PortalIndexRoute: typeof PortalIndexRoute
-  PortalTicketsTicketIdRoute: typeof PortalTicketsTicketIdRoute
+interface AuthenticatedPortalRouteChildren {
+  AuthenticatedPortalNewRequestRoute: typeof AuthenticatedPortalNewRequestRoute
+  AuthenticatedPortalProfileRoute: typeof AuthenticatedPortalProfileRoute
+  AuthenticatedPortalIndexRoute: typeof AuthenticatedPortalIndexRoute
+  AuthenticatedPortalTicketsTicketIdRoute: typeof AuthenticatedPortalTicketsTicketIdRoute
 }
 
-const PortalRouteChildren: PortalRouteChildren = {
-  PortalNewRequestRoute: PortalNewRequestRoute,
-  PortalProfileRoute: PortalProfileRoute,
-  PortalIndexRoute: PortalIndexRoute,
-  PortalTicketsTicketIdRoute: PortalTicketsTicketIdRoute,
+const AuthenticatedPortalRouteChildren: AuthenticatedPortalRouteChildren = {
+  AuthenticatedPortalNewRequestRoute: AuthenticatedPortalNewRequestRoute,
+  AuthenticatedPortalProfileRoute: AuthenticatedPortalProfileRoute,
+  AuthenticatedPortalIndexRoute: AuthenticatedPortalIndexRoute,
+  AuthenticatedPortalTicketsTicketIdRoute:
+    AuthenticatedPortalTicketsTicketIdRoute,
 }
 
-const PortalRouteWithChildren =
-  PortalRoute._addFileChildren(PortalRouteChildren)
+const AuthenticatedPortalRouteWithChildren =
+  AuthenticatedPortalRoute._addFileChildren(AuthenticatedPortalRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactRoute: ContactRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
-  PortalRoute: PortalRouteWithChildren,
   ResetPasswordRoute: ResetPasswordRoute,
   ServicesRoute: ServicesRoute,
+  AuthenticatedPortalRoute: AuthenticatedPortalRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
