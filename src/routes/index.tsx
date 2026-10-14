@@ -1,8 +1,210 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
-import { ArrowUpRight, ArrowDown, ShieldCheck, CircleCheck, ClipboardList, Activity, ChevronRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { SiteHeader, SiteFooter } from '@/components/thump/site-shell';
-import { services, pageHead } from '@/lib/thump/data';
-import rhino from '@/assets/thump-rhino.jpg';
-export const Route = createFileRoute('/')({head:()=>pageHead('Protection. Engineered.', 'Fire safety and security services in Bangalore. Explore THUMP systems and client maintenance support.'),component:Index});
-function Index(){return <><SiteHeader/><main><section className="hero relative bg-hero text-hero-foreground overflow-hidden"><img src={rhino} alt="Original faceted metallic rhino emblem, a symbol of strength and protection" width={1920} height={1024} fetchPriority="high" className="hero-image absolute inset-0 h-full w-full object-cover"/><div className="hero-shade absolute inset-0"/><div className="container-width relative h-full flex flex-col justify-center"><div className="hero-copy"><p className="eyebrow flex items-center gap-3 text-hero-muted"><span className="h-px w-8 bg-primary"/>A FIRE SAFETY & SECURITY COMPANY</p><h1 className="hero-title mt-8 font-black leading-[1.03]">PROTECTION.<br/><span className="text-primary">ENGINEERED.</span></h1><p className="mt-7 max-w-[390px] text-[15px] leading-7 text-hero-muted">Fire safety and security services, with<br className="hidden sm:block"/> maintenance support you can rely on.</p><div className="mt-9 flex flex-wrap gap-3"><Button asChild className="h-12 rounded-sm px-6"><Link to="/login">Client Login<ArrowUpRight/></Link></Button><Button asChild variant="outline" className="hero-outline h-12 rounded-sm px-5"><Link to="/portal/new-request">Raise a Service Request<ArrowUpRight/></Link></Button></div></div><div className="hero-bottom flex justify-between items-center absolute bottom-7 left-6 right-6 sm:left-10 sm:right-10"><span className="text-[9px] tracking-[0.14em] text-hero-muted flex items-center gap-2"><span className="size-1.5 bg-primary"/>BUILT ON STRENGTH. BACKED BY SERVICE.</span><a href="#protection" aria-label="Explore our services" className="hidden sm:flex items-center gap-3 text-[9px] tracking-[0.14em] text-hero-muted">SCROLL TO EXPLORE<ArrowDown className="size-4"/></a></div><div className="hero-caption hidden lg:block absolute right-0 bottom-28 text-[9px] text-hero-muted tracking-[0.15em]">STRENGTH / PRECISION / RELIABILITY</div></div></section><div className="assurance-band border-b border-border"><div className="container-width grid grid-cols-1 sm:grid-cols-3 gap-5 py-6">{[{icon:ShieldCheck,title:'Complete fire protection',text:'Systems that safeguard your spaces'},{icon:CircleCheck,title:'Precision-led service',text:'Attention to every critical detail'},{icon:Activity,title:'Reliable maintenance',text:'Support beyond installation'}].map(({icon:Icon,title,text})=><div key={title} className="flex items-center gap-4 justify-start sm:justify-center"><Icon className="size-6 text-primary stroke-[1.4] shrink-0"/><div><p className="text-xs font-semibold">{title}</p><p className="text-[11px] mt-1 text-muted-foreground">{text}</p></div></div>)}</div></div><section id="protection" className="container-width py-16 sm:py-20"><div className="flex flex-wrap justify-between items-end gap-5 mb-10"><div><p className="eyebrow mb-4">OUR EXPERTISE</p><h2 className="section-title">Every system. One commitment.</h2><p className="text-sm text-muted-foreground mt-4">Comprehensive fire safety solutions. Uncompromising attention to detail.</p></div><Link to="/services" className="text-xs font-semibold flex gap-3 items-center">Explore our services<ArrowUpRight className="size-4 text-primary"/></Link></div><div className="service-grid grid sm:grid-cols-2 lg:grid-cols-3">{services.map(({name,icon:Icon,text},i)=><Link to="/services" key={name} className="service-tile group p-7"><div className="flex justify-between"><Icon className="size-8 text-primary stroke-[1.3]"/><span className="text-[10px] text-muted-foreground font-mono">0{i+1}</span></div><h3 className="font-semibold text-base mt-6">{name}</h3><p className="text-xs text-muted-foreground mt-2">{text}</p><ArrowUpRight className="size-4 mt-6 text-muted-foreground group-hover:text-primary transition-colors"/></Link>)}</div></section><section className="portal-intro bg-muted border-y border-border"><div className="container-width grid md:grid-cols-[1.2fr_1fr] gap-12 py-16 items-center"><div><p className="eyebrow mb-4">THE THUMP CLIENT PORTAL</p><h2 className="section-title">Less follow-up.<br/>More peace of mind.</h2><p className="text-sm text-muted-foreground max-w-md leading-7 mt-5">Registered customers can raise maintenance requests, keep track of ticket progress and stay connected to their service team.</p><Button asChild className="h-11 mt-7 rounded-sm"><Link to="/login">Access client portal<ArrowUpRight/></Link></Button></div><div className="border-l-2 border-primary pl-7 space-y-8">{[{icon:ClipboardList,title:'Raise a request',text:'Share the site, equipment and issue in one place.'},{icon:Activity,title:'Track every step',text:'Follow your request from review to resolution.'},{icon:ShieldCheck,title:'Your dedicated workspace',text:'Your organisation’s sites and service records.'}].map(({icon:Icon,title,text})=><div className="flex gap-4" key={title}><Icon className="size-5 mt-1 shrink-0 text-primary"/><div><h3 className="text-sm font-semibold">{title}</h3><p className="mt-2 text-xs text-muted-foreground">{text}</p></div></div>)}</div></div></section><section className="container-width py-12 flex flex-wrap justify-between items-center gap-5"><div><p className="text-xl font-bold">Let’s strengthen your fire safety.</p><p className="text-sm text-muted-foreground mt-2">Talk to THUMP about your systems and service needs.</p></div><Button asChild variant="outline" className="h-12 rounded-sm"><Link to="/contact">Get in touch<ChevronRight/></Link></Button></section></main><SiteFooter/></>}
+import { createFileRoute, Link } from "@tanstack/react-router";
+import {
+  ArrowUpRight,
+  ArrowDown,
+  ShieldCheck,
+  CircleCheck,
+  ClipboardList,
+  Activity,
+  ChevronRight,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { SiteHeader, SiteFooter } from "@/components/thump/site-shell";
+import { services, pageHead } from "@/lib/thump/data";
+import rhino from "@/assets/thump-rhino.jpg";
+export const Route = createFileRoute("/")({
+  head: () =>
+    pageHead(
+      "Protection. Engineered.",
+      "Fire safety and security services in Bangalore. Explore THUMP systems and client maintenance support.",
+    ),
+  component: Index,
+});
+function Index() {
+  return (
+    <>
+      <SiteHeader />
+      <main>
+        <section className="hero relative bg-hero text-hero-foreground overflow-hidden">
+          <img
+            src={rhino}
+            alt="Original faceted metallic rhino emblem, a symbol of strength and protection"
+            width={1920}
+            height={1024}
+            fetchPriority="high"
+            className="hero-image absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="hero-shade absolute inset-0" />
+          <div className="container-width relative h-full flex flex-col justify-center">
+            <div className="hero-copy">
+              <p className="eyebrow flex items-center gap-3 text-hero-muted">
+                <span className="h-px w-8 bg-primary" />A FIRE SAFETY & SECURITY COMPANY
+              </p>
+              <h1 className="hero-title mt-8 font-black leading-[1.03]">
+                PROTECTION.
+                <br />
+                <span className="text-primary">ENGINEERED.</span>
+              </h1>
+              <p className="mt-7 max-w-[390px] text-[15px] leading-7 text-hero-muted">
+                Fire safety and security services, with
+                <br className="hidden sm:block" /> maintenance support you can rely on.
+              </p>
+              <div className="mt-9 flex flex-wrap gap-3">
+                <Button asChild className="h-12 rounded-sm px-6">
+                  <Link to="/login">
+                    Client Login
+                    <ArrowUpRight />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" className="hero-outline h-12 rounded-sm px-5">
+                  <Link to="/portal/new-request">
+                    Raise a Service Request
+                    <ArrowUpRight />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+            <div className="hero-bottom flex justify-between items-center absolute bottom-7 left-6 right-6 sm:left-10 sm:right-10">
+              <span className="text-[9px] tracking-[0.14em] text-hero-muted flex items-center gap-2">
+                <span className="size-1.5 bg-primary" />
+                BUILT ON STRENGTH. BACKED BY SERVICE.
+              </span>
+              <a
+                href="#protection"
+                aria-label="Explore our services"
+                className="hidden sm:flex items-center gap-3 text-[9px] tracking-[0.14em] text-hero-muted"
+              >
+                SCROLL TO EXPLORE
+                <ArrowDown className="size-4" />
+              </a>
+            </div>
+            <div className="hero-caption hidden lg:block absolute right-0 bottom-28 text-[9px] text-hero-muted tracking-[0.15em]">
+              STRENGTH / PRECISION / RELIABILITY
+            </div>
+          </div>
+        </section>
+        <div className="assurance-band border-b border-border">
+          <div className="container-width grid grid-cols-1 sm:grid-cols-3 gap-5 py-6">
+            {[
+              {
+                icon: ShieldCheck,
+                title: "Complete fire protection",
+                text: "Systems that safeguard your spaces",
+              },
+              {
+                icon: CircleCheck,
+                title: "Precision-led service",
+                text: "Attention to every critical detail",
+              },
+              {
+                icon: Activity,
+                title: "Reliable maintenance",
+                text: "Support beyond installation",
+              },
+            ].map(({ icon: Icon, title, text }) => (
+              <div key={title} className="flex items-center gap-4 justify-start sm:justify-center">
+                <Icon className="size-6 text-primary stroke-[1.4] shrink-0" />
+                <div>
+                  <p className="text-xs font-semibold">{title}</p>
+                  <p className="text-[11px] mt-1 text-muted-foreground">{text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <section id="protection" className="container-width py-16 sm:py-20">
+          <div className="flex flex-wrap justify-between items-end gap-5 mb-10">
+            <div>
+              <p className="eyebrow mb-4">OUR EXPERTISE</p>
+              <h2 className="section-title">Every system. One commitment.</h2>
+              <p className="text-sm text-muted-foreground mt-4">
+                Comprehensive fire safety solutions. Uncompromising attention to detail.
+              </p>
+            </div>
+            <Link to="/services" className="text-xs font-semibold flex gap-3 items-center">
+              Explore our services
+              <ArrowUpRight className="size-4 text-primary" />
+            </Link>
+          </div>
+          <div className="service-grid grid sm:grid-cols-2 lg:grid-cols-3">
+            {services.map(({ name, icon: Icon, text }, i) => (
+              <Link to="/services" key={name} className="service-tile group p-7">
+                <div className="flex justify-between">
+                  <Icon className="size-8 text-primary stroke-[1.3]" />
+                  <span className="text-[10px] text-muted-foreground font-mono">0{i + 1}</span>
+                </div>
+                <h3 className="font-semibold text-base mt-6">{name}</h3>
+                <p className="text-xs text-muted-foreground mt-2">{text}</p>
+                <ArrowUpRight className="size-4 mt-6 text-muted-foreground group-hover:text-primary transition-colors" />
+              </Link>
+            ))}
+          </div>
+        </section>
+        <section className="portal-intro bg-muted border-y border-border">
+          <div className="container-width grid md:grid-cols-[1.2fr_1fr] gap-12 py-16 items-center">
+            <div>
+              <p className="eyebrow mb-4">THE THUMP CLIENT PORTAL</p>
+              <h2 className="section-title">
+                Less follow-up.
+                <br />
+                More peace of mind.
+              </h2>
+              <p className="text-sm text-muted-foreground max-w-md leading-7 mt-5">
+                Registered customers can raise maintenance requests, keep track of ticket progress
+                and stay connected to their service team.
+              </p>
+              <Button asChild className="h-11 mt-7 rounded-sm">
+                <Link to="/login">
+                  Access client portal
+                  <ArrowUpRight />
+                </Link>
+              </Button>
+            </div>
+            <div className="border-l-2 border-primary pl-7 space-y-8">
+              {[
+                {
+                  icon: ClipboardList,
+                  title: "Raise a request",
+                  text: "Share the site, equipment and issue in one place.",
+                },
+                {
+                  icon: Activity,
+                  title: "Track every step",
+                  text: "Follow your request from review to resolution.",
+                },
+                {
+                  icon: ShieldCheck,
+                  title: "Your dedicated workspace",
+                  text: "Your organisation’s sites and service records.",
+                },
+              ].map(({ icon: Icon, title, text }) => (
+                <div className="flex gap-4" key={title}>
+                  <Icon className="size-5 mt-1 shrink-0 text-primary" />
+                  <div>
+                    <h3 className="text-sm font-semibold">{title}</h3>
+                    <p className="mt-2 text-xs text-muted-foreground">{text}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+        <section className="container-width py-12 flex flex-wrap justify-between items-center gap-5">
+          <div>
+            <p className="text-xl font-bold">Let’s strengthen your fire safety.</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              Talk to THUMP about your systems and service needs.
+            </p>
+          </div>
+          <Button asChild variant="outline" className="h-12 rounded-sm">
+            <Link to="/contact">
+              Get in touch
+              <ChevronRight />
+            </Link>
+          </Button>
+        </section>
+      </main>
+      <SiteFooter />
+    </>
+  );
+}

@@ -1,3 +1,29 @@
-import { Link } from '@tanstack/react-router';
-export function RhinoMark({ className = '' }: { className?: string }) { return <svg viewBox="0 0 72 54" fill="currentColor" aria-hidden="true" className={className}><path d="M8 25 20 12 44 8 57 15 60 27 68 24 65 34 55 39 48 48 39 46 40 36 27 36 22 46 14 46 16 32 5 35 0 27Z"/><path d="m59 23 1-16 8 18Z"/><path d="m43 9 5-9 5 13Z"/></svg>; }
-export function Brand({ light = false }: { light?: boolean }) { return <Link to="/" aria-label="THUMP home" className={`brand flex min-w-0 items-center gap-3 ${light ? 'text-hero-foreground' : 'text-foreground'}`}><RhinoMark className="h-10 w-12 shrink-0 text-primary"/><span className="min-w-0"><strong className="block text-[26px] leading-none font-black">THUMP<span className="text-primary">.</span></strong><span className="block mt-1 text-[8px] font-semibold tracking-[0.15em]">SERVICES & SOLUTIONS</span></span></Link>; }
+import { Link } from "@tanstack/react-router";
+export function RhinoMark({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 72 54" fill="currentColor" aria-hidden="true" className={className}>
+      <path d="M8 25 20 12 44 8 57 15 60 27 68 24 65 34 55 39 48 48 39 46 40 36 27 36 22 46 14 46 16 32 5 35 0 27Z" />
+      <path d="m59 23 1-16 8 18Z" />
+      <path d="m43 9 5-9 5 13Z" />
+    </svg>
+  );
+}
+export function Brand({ light = false }: { light?: boolean }) {
+  return (
+    <Link
+      to="/"
+      aria-label="THUMP home"
+      className={`brand flex min-w-0 items-center gap-3 ${light ? "text-hero-foreground" : "text-foreground"}`}
+    >
+      <RhinoMark className="h-10 w-12 shrink-0 text-primary" />
+      <span className="min-w-0">
+        <strong className="block text-[26px] leading-none font-black">
+          THUMP<span className="text-primary">.</span>
+        </strong>
+        <span className="block mt-1 text-[8px] font-semibold tracking-[0.15em]">
+          SERVICES & SOLUTIONS
+        </span>
+      </span>
+    </Link>
+  );
+}

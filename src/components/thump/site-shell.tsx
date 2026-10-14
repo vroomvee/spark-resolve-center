@@ -1,7 +1,101 @@
-import { Link } from '@tanstack/react-router';
-import { useState } from 'react';
-import { ArrowUpRight, Menu, X, Phone, Mail, MapPin } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Brand } from './brand';
-export function SiteHeader() { const [open,setOpen] = useState(false); return <header className="site-header"><div className="container-width flex h-24 items-center justify-between gap-4"><Brand/><nav aria-label="Main navigation" className="hidden md:flex items-center gap-9 text-[13px] font-medium"><Link to="/" activeOptions={{exact:true}} activeProps={{className:'text-primary'}}>Home</Link><Link to="/services" activeProps={{className:'text-primary'}}>Our services</Link><Link to="/contact" activeProps={{className:'text-primary'}}>Contact us</Link><Button asChild className="h-11 rounded-sm px-6"><Link to="/login">Client portal <ArrowUpRight/></Link></Button></nav><Button variant="ghost" size="icon" className="md:hidden" aria-label={open?'Close navigation':'Open navigation'} onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</Button></div>{open && <nav aria-label="Mobile navigation" className="flex flex-col gap-5 px-6 pb-6 md:hidden"><Link to="/" onClick={()=>setOpen(false)}>Home</Link><Link to="/services" onClick={()=>setOpen(false)}>Our services</Link><Link to="/contact" onClick={()=>setOpen(false)}>Contact us</Link><Link to="/login" onClick={()=>setOpen(false)}>Client portal ↗</Link></nav>}</header>; }
-export function SiteFooter() { return <footer className="bg-hero text-hero-muted"><div className="container-width grid gap-10 py-14 md:grid-cols-[1.1fr_0.8fr_1.5fr]"><div><Brand light/><p className="mt-5 text-sm">A Fire Safety & Security Company</p><p className="mt-2 text-xs">Strength in protection. Precision in service.</p></div><div><h3 className="footer-heading">GET IN TOUCH</h3><a href="tel:08041134036" className="footer-contact"><Phone/>080-41134036</a><a href="mailto:mohit@thumpserve.com" className="footer-contact"><Mail/>mohit@thumpserve.com</a></div><div><h3 className="footer-heading">BANGALORE, INDIA</h3><p className="footer-contact items-start"><MapPin/><span>No. 839, 6th Cross, 10th 'A' Main,<br/>Indiranagar 2nd Stage, Bangalore - 560 038.</span></p><a href="https://www.thumpserve.com" className="mt-4 inline-block text-xs">www.thumpserve.com <ArrowUpRight className="inline size-3"/></a></div></div><div className="container-width flex flex-wrap justify-between gap-3 border-t border-hero-line py-5 text-[10px]"><span>© 2026 THUMP Services & Solutions. All rights reserved.</span><span>FIRE SAFETY. WITHOUT COMPROMISE.</span></div></footer>; }
+import { Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { ArrowUpRight, Menu, X, Phone, Mail, MapPin } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Brand } from "./brand";
+export function SiteHeader() {
+  const [open, setOpen] = useState(false);
+  return (
+    <header className="site-header">
+      <div className="container-width flex h-24 items-center justify-between gap-4">
+        <Brand />
+        <nav
+          aria-label="Main navigation"
+          className="hidden md:flex items-center gap-9 text-[13px] font-medium"
+        >
+          <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: "text-primary" }}>
+            Home
+          </Link>
+          <Link to="/services" activeProps={{ className: "text-primary" }}>
+            Our services
+          </Link>
+          <Link to="/contact" activeProps={{ className: "text-primary" }}>
+            Contact us
+          </Link>
+          <Button asChild className="h-11 rounded-sm px-6">
+            <Link to="/login">
+              Client portal <ArrowUpRight />
+            </Link>
+          </Button>
+        </nav>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="md:hidden"
+          aria-label={open ? "Close navigation" : "Open navigation"}
+          onClick={() => setOpen(!open)}
+        >
+          {open ? <X /> : <Menu />}
+        </Button>
+      </div>
+      {open && (
+        <nav aria-label="Mobile navigation" className="flex flex-col gap-5 px-6 pb-6 md:hidden">
+          <Link to="/" onClick={() => setOpen(false)}>
+            Home
+          </Link>
+          <Link to="/services" onClick={() => setOpen(false)}>
+            Our services
+          </Link>
+          <Link to="/contact" onClick={() => setOpen(false)}>
+            Contact us
+          </Link>
+          <Link to="/login" onClick={() => setOpen(false)}>
+            Client portal ↗
+          </Link>
+        </nav>
+      )}
+    </header>
+  );
+}
+export function SiteFooter() {
+  return (
+    <footer className="bg-hero text-hero-muted">
+      <div className="container-width grid gap-10 py-14 md:grid-cols-[1.1fr_0.8fr_1.5fr]">
+        <div>
+          <Brand light />
+          <p className="mt-5 text-sm">A Fire Safety & Security Company</p>
+          <p className="mt-2 text-xs">Strength in protection. Precision in service.</p>
+        </div>
+        <div>
+          <h3 className="footer-heading">GET IN TOUCH</h3>
+          <a href="tel:08041134036" className="footer-contact">
+            <Phone />
+            080-41134036
+          </a>
+          <a href="mailto:mohit@thumpserve.com" className="footer-contact">
+            <Mail />
+            mohit@thumpserve.com
+          </a>
+        </div>
+        <div>
+          <h3 className="footer-heading">BANGALORE, INDIA</h3>
+          <p className="footer-contact items-start">
+            <MapPin />
+            <span>
+              No. 839, 6th Cross, 10th 'A' Main,
+              <br />
+              Indiranagar 2nd Stage, Bangalore - 560 038.
+            </span>
+          </p>
+          <a href="https://www.thumpserve.com" className="mt-4 inline-block text-xs">
+            www.thumpserve.com <ArrowUpRight className="inline size-3" />
+          </a>
+        </div>
+      </div>
+      <div className="container-width flex flex-wrap justify-between gap-3 border-t border-hero-line py-5 text-[10px]">
+        <span>© 2026 THUMP Services & Solutions. All rights reserved.</span>
+        <span>FIRE SAFETY. WITHOUT COMPROMISE.</span>
+      </div>
+    </footer>
+  );
+}

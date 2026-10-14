@@ -1,12 +1,94 @@
-import { Link } from '@tanstack/react-router';
-import { LayoutDashboard, Plus, UserRound, LogOut, ArrowLeft, FlaskConical } from 'lucide-react';
-import { Brand } from './brand';
-import { Button } from '@/components/ui/button';
-import { useDemo } from './demo-context';
-import type { ReactNode } from 'react';
+import { Link } from "@tanstack/react-router";
+import { LayoutDashboard, Plus, UserRound, LogOut, ArrowLeft, FlaskConical } from "lucide-react";
+import { Brand } from "./brand";
+import { Button } from "@/components/ui/button";
+import { useDemo } from "./demo-context";
+import type { ReactNode } from "react";
 export function PortalShell({ children }: { children: ReactNode }) {
- const {clearDemo}=useDemo();
- return <div className="min-h-screen bg-muted"><div className="demo-banner"><FlaskConical className="size-4"/><span>DEMO PORTAL · Fictional organisation and tickets. Nothing is saved or sent.</span></div><header className="bg-background border-b border-border"><div className="container-width flex flex-wrap items-center justify-between gap-5 py-5"><Brand/><div className="text-right text-xs"><strong className="block">Demo — Northstar Properties</strong><span className="text-muted-foreground">Client workspace</span></div></div></header><div className="container-width grid gap-8 py-8 lg:grid-cols-[210px_minmax(0,1fr)]"><aside><nav aria-label="Client navigation" className="portal-nav"><Link to="/portal" activeOptions={{exact:true}} activeProps={{className:'active'}}><LayoutDashboard/>Overview</Link><Link to="/portal/new-request" activeProps={{className:'active'}}><Plus/>New request</Link><Link to="/portal/profile" activeProps={{className:'active'}}><UserRound/>My profile</Link><Link to="/login" onClick={clearDemo}><LogOut/>Exit demo</Link></nav><Link to="/" className="mt-8 hidden lg:flex gap-2 text-xs text-muted-foreground"><ArrowLeft className="size-4"/>Back to website</Link></aside><main className="min-w-0">{children}</main></div></div>;
+  const { clearDemo } = useDemo();
+  return (
+    <div className="min-h-screen bg-muted">
+      <div className="demo-banner">
+        <FlaskConical className="size-4" />
+        <span>DEMO PORTAL · Fictional organisation and tickets. Nothing is saved or sent.</span>
+      </div>
+      <header className="bg-background border-b border-border">
+        <div className="container-width flex flex-wrap items-center justify-between gap-5 py-5">
+          <Brand />
+          <div className="text-right text-xs">
+            <strong className="block">Demo — Northstar Properties</strong>
+            <span className="text-muted-foreground">Client workspace</span>
+          </div>
+        </div>
+      </header>
+      <div className="container-width grid gap-8 py-8 lg:grid-cols-[210px_minmax(0,1fr)]">
+        <aside>
+          <nav aria-label="Client navigation" className="portal-nav">
+            <Link
+              to="/portal"
+              activeOptions={{ exact: true }}
+              activeProps={{ className: "active" }}
+            >
+              <LayoutDashboard />
+              Overview
+            </Link>
+            <Link to="/portal/new-request" activeProps={{ className: "active" }}>
+              <Plus />
+              New request
+            </Link>
+            <Link to="/portal/profile" activeProps={{ className: "active" }}>
+              <UserRound />
+              My profile
+            </Link>
+            <Link to="/login" onClick={clearDemo}>
+              <LogOut />
+              Exit demo
+            </Link>
+          </nav>
+          <Link to="/" className="mt-8 hidden lg:flex gap-2 text-xs text-muted-foreground">
+            <ArrowLeft className="size-4" />
+            Back to website
+          </Link>
+        </aside>
+        <main className="min-w-0">{children}</main>
+      </div>
+    </div>
+  );
 }
-export function Status({value}:{value:string}) { return <span className={`status ${value==='Resolved'||value==='Closed'?'status-success':value==='New'||value==='Under Review'?'status-neutral':'status-active'}`}><span className="size-1.5 rounded-full bg-current"/>{value}</span>; }
-export function PortalHeading({title,subtitle,action=false}:{title:string;subtitle:string;action?:boolean}) { return <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 mb-8"><div className="min-w-0"><p className="eyebrow mb-3">CLIENT WORKSPACE</p><h1 className="text-3xl font-bold">{title}</h1><p className="text-sm text-muted-foreground mt-2">{subtitle}</p></div>{action&&<Button asChild className="self-start"><Link to="/portal/new-request"><Plus/><span className="hidden sm:inline">New request</span></Link></Button>}</div>; }
+export function Status({ value }: { value: string }) {
+  return (
+    <span
+      className={`status ${value === "Resolved" || value === "Closed" ? "status-success" : value === "New" || value === "Under Review" ? "status-neutral" : "status-active"}`}
+    >
+      <span className="size-1.5 rounded-full bg-current" />
+      {value}
+    </span>
+  );
+}
+export function PortalHeading({
+  title,
+  subtitle,
+  action = false,
+}: {
+  title: string;
+  subtitle: string;
+  action?: boolean;
+}) {
+  return (
+    <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 mb-8">
+      <div className="min-w-0">
+        <p className="eyebrow mb-3">CLIENT WORKSPACE</p>
+        <h1 className="text-3xl font-bold">{title}</h1>
+        <p className="text-sm text-muted-foreground mt-2">{subtitle}</p>
+      </div>
+      {action && (
+        <Button asChild className="self-start">
+          <Link to="/portal/new-request">
+            <Plus />
+            <span className="hidden sm:inline">New request</span>
+          </Link>
+        </Button>
+      )}
+    </div>
+  );
+}
